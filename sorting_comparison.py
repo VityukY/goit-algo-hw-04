@@ -1,3 +1,5 @@
+# зберегти рези у файл
+# зберегти рези у файл
 import random
 import timeit
 
@@ -48,37 +50,29 @@ def get_random_array(amount=100000):
     test_array = [random.randint(1, 100) for _ in range(amount)]
     return test_array
 
+def test_sorting_algorithm(algorithm, data):
+    def sort_data():
+        return algorithm(data.copy())
+    return timeit.timeit(sort_data, number=1)
 
-while True:
-    try:
-        size = int(input("Sorting will be run 100 times, for data collection. Pring the size of testing data:\n >>>"))
-        array = get_random_array(size)
-    except KeyboardInterrupt:
-        print("\nKeyboardInterrupt detected. Exiting gracefully.")
-        break
-    except:
-        print ("Wrong input")
-        continue
+small_array = get_random_array (100)
+medium_array = get_random_array (1000)
+large_array = get_random_array (10000)
 
-    timer_sorted = timeit.Timer(lambda: sorted(array))
-    result_sorted = timer_sorted.timeit(number=100)
+small_result_merge = test_sorting_algorithm(merge_sort, small_array)
+small_result_inseert = test_sorting_algorithm(insertion_sort, small_array)
+small_result_defult = test_sorting_algorithm(sorted, small_array)
+medium_array_merge = test_sorting_algorithm(merge_sort, medium_array)
+medium_array_inseert = test_sorting_algorithm(insertion_sort, medium_array)
+medium_array_defult = test_sorting_algorithm(sorted, medium_array)
+large_array_merge = test_sorting_algorithm(merge_sort, large_array)
+large_array_inseert = test_sorting_algorithm(insertion_sort, large_array)
+large_array_defult = test_sorting_algorithm(sorted, large_array)
 
-    timer_insertsort = timeit.Timer(lambda: insertion_sort(array))
-    result_insertsort = timer_insertsort.timeit(number=100)
-
-    timer_margesort = timeit.Timer(lambda:merge_sort(array))
-    result_margesort = timer_margesort.timeit(number=100)
-
-    print (f"Result of using Python base algo for sorting data take {result_sorted} seconds.")
-    print (f"Result of using insert sort algo for sorting data take {result_insertsort} seconds.")
-    print (f"Result of using merge sort algo for sorting data take {result_margesort} seconds.")
-
-    if result_sorted < result_insertsort and result_sorted < result_margesort:
-        print (f"\nPython base algo win with result: {round (result_sorted,6)} ")
-    elif result_insertsort < result_margesort:
-        print (f"Insert sort method algo win with result: {round (result_insertsort,6)} ")
-    else:
-        print (f"Merge sort method algo win with result: {round (result_margesort,6)} ")
-    print ("\nYou can try again or Ctrl+C for out=)\n\n\n")
-
-
+with open("readme.md", 'w') as fp:
+    small_data_result = f'Data size: small.\nMerge method time result {small_result_merge}\nInsert method time result {small_result_inseert}\nDefault method time result {small_result_defult}\n\n'
+    fp.writelines (small_data_result)
+    medium_mall_data_result = f'Data size: medium.\nMerge method time result {medium_array_merge}\nInsert method time result {medium_array_inseert}\nDefault method time result {medium_array_defult}\n\n'
+    fp.writelines (medium_mall_data_result)
+    large_data_result = f'Data size: large.\nMerge method time result {large_array_merge}\nInsert method time result {large_array_inseert}\nDefault method time result {large_array_defult}\n\n'
+    fp.writelines (large_data_result)
